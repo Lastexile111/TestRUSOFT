@@ -14,7 +14,7 @@ public class Car {
     private int carid;
 
     @Column(length = 50,unique = true, nullable = false)
-    private String lable;
+    private String label;
 
     @Column
     @Temporal(TemporalType.DATE)
@@ -27,8 +27,8 @@ public class Car {
     public Car() {
     }
 
-    public Car(String lable, Date manufactureDate) {
-        this.lable = lable;
+    public Car(String label, Date manufactureDate) {
+        this.label = label;
         this.manufactureDate = manufactureDate;
         this.owner = null;
     }
@@ -41,12 +41,12 @@ public class Car {
         this.carid = carid;
     }
 
-    public String getLable() {
-        return lable;
+    public String getLabel() {
+        return label;
     }
 
-    public void setLable(String lable) {
-        this.lable = lable;
+    public void setLabel(String label) {
+        this.label = label;
     }
 
     public Date getManufactureDate() {

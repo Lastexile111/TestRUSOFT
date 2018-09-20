@@ -21,6 +21,11 @@ public class ClientsDAOImpl implements ClientsDAO {
 
     @Override
     public void add(Client client) {
+
+        if(findByLogin(client.getLogin())!= null){
+            throw new IllegalArgumentException("Такой пользователь уже существует");
+        }
+
         em.getTransaction().begin();
         try {
             em.persist(client);
@@ -33,6 +38,11 @@ public class ClientsDAOImpl implements ClientsDAO {
 
     @Override
     public void delete(Client client) {
+
+        if(findByLogin(client.getLogin())== null){
+            throw new IllegalArgumentException("Такой пользователь не существует");
+        }
+
         em.getTransaction().begin();
 
         try{
