@@ -6,7 +6,6 @@ import ru.rusoft.example.model.Client;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
-import java.util.List;
 
 @Service
 public class ClientsDAOImpl implements ClientsDAO {
@@ -29,6 +28,7 @@ public class ClientsDAOImpl implements ClientsDAO {
         em.getTransaction().begin();
         try {
             em.persist(client);
+            client.getOwnedCar().setOwner(client);
             em.getTransaction().commit();
         } catch (PersistenceException e) {
             em.getTransaction().rollback();

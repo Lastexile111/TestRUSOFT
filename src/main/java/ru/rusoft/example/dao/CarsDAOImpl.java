@@ -36,6 +36,7 @@ public class CarsDAOImpl implements CarsDAO {
 
         em.getTransaction().begin();
         try {
+            car.getOwner().setOwnedCar(null);
             car.setOwner(null);
             em.getTransaction().commit();
 
@@ -50,14 +51,24 @@ public class CarsDAOImpl implements CarsDAO {
 //        return em.find(Car.class, id);
 //    }
 
-    public Car findFreeCar(String label, Date manufactureDate){
+    public Car findFreeCar(String label, Date manufactureDate) {
 
-        List<Car> freeCars = em.createQuery("SELECT c FROM Car c WHERE c.label = :label AND c.manufactureDate = :manufactureDate AND c.owner = null")
+
+        List<Car> Cars = em.createQuery("SELECT c FROM Car c WHERE c.label = :label AND c.manufactureDate = :manufactureDate ")
                 .setParameter("label", label)
                 .setParameter("manufactureDate", manufactureDate)
                 .getResultList();
-        return freeCars.get(1);
+
+        for (Car car : Cars) {
+            if (car.getOwner() == null) {
+                return car;
+            }
+        }
+
+            throw new IllegalArgumentException("Свободных машин нет");
     }
+
+
 
     public Car getAndCheckClientCar(Client client,String label){
         Car ownedCar = client.getOwnedCar();
