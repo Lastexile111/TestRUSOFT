@@ -1,5 +1,9 @@
 package ru.rusoft.example.web;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -14,8 +18,11 @@ import javax.validation.Valid;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 
 @RestController
+@RequestMapping("/main")
+@Api(value = "/main", description = "Main Menu operations ")
 public class WorkWithClientsController {
 
     @Autowired
@@ -29,57 +36,53 @@ public class WorkWithClientsController {
 
     SimpleDateFormat format = new SimpleDateFormat("yyyy");
 
-    @RequestMapping(method = RequestMethod.GET, value = "/main")
+
+
+   @GetMapping
+   @ApiOperation(value = "Show main menu")
     public String mainMenuPage(){
         //Позже дописать
 
-
-            return "index12";
+       return "Main menu";
 
     }
 
-
-
-    @RequestMapping(method = RequestMethod.GET, value = "/main/add")
-        public String addClientShowForm(){ return "/main/add"; }
-
-    @RequestMapping(method = RequestMethod.POST, value = "/main/add")
-    public String addClientPostForm(@Valid @ModelAttribute("addFormBean") ClientAddFormBean addFormBean,
-                                    BindingResult binding){
+    @ApiOperation(value = "Add Client")
+//    @ApiImplicitParams(
+//            {
+//                    @ApiImplicitParam(name = "login", dataType = "String", required = true, paramType = "query"),
+//                    @ApiImplicitParam(name = "birthYear", dataType = "String", required = true, paramType = "query"),
+//                    @ApiImplicitParam(name = "label", dataType = "String", required = true, paramType = "query"),
+//                    @ApiImplicitParam(name = "manufactureDate", dataType = "String", required = true, paramType = "query")
+//            }
+//    )
+    @PostMapping
+    public String addClientPostForm(@RequestBody ClientAddFormBean addFormBean ){
         Date birthYear = null;
         Date manufactureDate = null;
 
-        if (addFormBean.getLogin().isEmpty()) {
-            binding.addError(new FieldError("addFormBean",
-                    "login",
-                    "Поле Login пустое"));
+
+        if (addFormBean.getLogin() == null) {
+            throw new IllegalArgumentException("Поле Login пустое");
         }
 
-        if (addFormBean.getLabel().isEmpty()) {
-            binding.addError(new FieldError("addFormBean",
-                    "label",
-                    "Поле Label пустое"));
+        if (addFormBean.getLabel()== null) {
+            throw new IllegalArgumentException("Поле Label пустое");
+
         }
 
         try {
             birthYear = format.parse(addFormBean.getBirthYear());
         } catch (ParseException e) {
-            binding.addError(new FieldError("addFormBean",
-                    "birthYear",
-                    "Неверный формат даты"));
+            e.printStackTrace();
         }
 
         try {
             manufactureDate = format.parse(addFormBean.getManufactureDate());
         } catch (ParseException e) {
-            binding.addError(new FieldError("addFormBean",
-                    "manufactureDate",
-                    "Неверный формат даты"));
+            e.printStackTrace();
         }
 
-        if (binding.hasErrors()) {
-            return "/main/add";
-        }
 
 
         Client client = new Client(addFormBean.getLogin(),birthYear
@@ -88,44 +91,33 @@ public class WorkWithClientsController {
         try {
             clientsDAO.add(client);
         }catch(IllegalArgumentException e) {
-            binding.addError(new FieldError("addFormBean",
-                    "login",
-                    "Такой пользователь уже существует"));
+            e.printStackTrace();
         }
 
-        if (binding.hasErrors()) {
-            return "/main/add";
-        }
 
         return "redirect:/main";
     }
 
 
+    @ApiOperation(value = "Delete Client")
+//    @ApiImplicitParams(
+//            {
+//                    @ApiImplicitParam(name = "login", dataType = "String", required = true, paramType = "query"),
+//                    @ApiImplicitParam(name = "label", dataType = "String", required = true, paramType = "query")
+//            }
+//    )
+    @DeleteMapping
+    public String deleteClientPostForm(@RequestBody ClientDeleteFormBean deleteFormBean){
 
-
-    @RequestMapping(method = RequestMethod.GET, value = "/main/delete")
-    public String deleteClientShowForm(){ return "/main/delete"; }
-
-    @RequestMapping(method = RequestMethod.POST, value = "/main/delete")
-    public String deleteClientPostForm(@Valid @ModelAttribute("deleteFormBean") ClientDeleteFormBean deleteFormBean,
-                                       BindingResult binding){
-
-        if (deleteFormBean.getLogin().isEmpty()) {
-            binding.addError(new FieldError("deleteFormBean",
-                    "login",
-                    "Поле Login пустое"));
-        }
-
-        if (deleteFormBean.getLabel().isEmpty()) {
-            binding.addError(new FieldError("deleteFormBean",
-                    "label",
-                    "Поле Label пустое"));
+        if (deleteFormBean.getLogin() == null) {
+            throw new IllegalArgumentException("Поле Login пустое");
         }
 
 
-        if (binding.hasErrors()) {
-            return "/main/delete";
+        if (deleteFormBean.getLabel() == null) {
+        throw new IllegalArgumentException("Поле Lebel пустое");
         }
+
 
 
         Client client = clientsDAO.findByLogin(deleteFormBean.getLogin());
@@ -134,15 +126,8 @@ public class WorkWithClientsController {
         try {
             car = carsDAO.getAndCheckClientCar(client, deleteFormBean.getLabel());
         }catch(IllegalArgumentException e) {
-            binding.addError(new FieldError("deleteFormBean",
-                    "label",
-                    " Клиенту не назначена эта машина"));
+            e.printStackTrace();
         }
-
-        if (binding.hasErrors()) {
-            return "/main/delete";
-        }
-
 
         carsDAO.detachClient(car);
         clientsDAO.delete(client);

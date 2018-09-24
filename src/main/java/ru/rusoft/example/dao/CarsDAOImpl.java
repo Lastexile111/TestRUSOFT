@@ -50,7 +50,7 @@ public class CarsDAOImpl implements CarsDAO {
 //    public Car findById(int id) {
 //        return em.find(Car.class, id);
 //    }
-
+    @Override
     public Car findFreeCar(String label, Date manufactureDate) {
 
 
@@ -69,7 +69,7 @@ public class CarsDAOImpl implements CarsDAO {
     }
 
 
-
+    @Override
     public Car getAndCheckClientCar(Client client,String label){
         Car ownedCar = client.getOwnedCar();
         if((ownedCar.getLabel() != label)||(ownedCar.getOwner() != client)){
