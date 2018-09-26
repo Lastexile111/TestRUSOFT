@@ -9,6 +9,14 @@ public class ClientDeleteFormBean {
     @Size(min = 2, max = 50)
     private String label = "";
 
+    public ClientDeleteFormBean() {
+    }
+
+    public ClientDeleteFormBean(@Size(min = 3, max = 50) String login, @Size(min = 2, max = 50) String label) {
+        this.login = login;
+        this.label = label;
+    }
+
     public String getLogin() {
         return login;
     }

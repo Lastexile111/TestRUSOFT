@@ -56,7 +56,6 @@ public class ClientsDAOImpl implements ClientsDAO {
     }
 
     @Override
-    public Client findByLogin(String login)  {
-        return em.find(Client.class, login);
+    public Client findByLogin(String login)  { return em.find(Client.class, login);
     }
 }

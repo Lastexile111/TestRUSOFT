@@ -43,7 +43,7 @@ public class ExampleApplicationTests {
 
 
 	@Test
-	public void freeCarSearch() {
+	public void freeCarSearchTest() {
 		Date now = new Date();
 		Car car = new Car("test", now);
 
@@ -55,7 +55,7 @@ public class ExampleApplicationTests {
 
 
 	@Test
-	public void clientAdd() {
+	public void clientAddTest() {
 		Date now = new Date();
 		Car car = new Car("test", now);
 		Client client = new Client("tester", now,car);
@@ -77,7 +77,7 @@ public class ExampleApplicationTests {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void doubleAdditionClientException() {
+	public void doubleAdditionClientExceptionTest() {
 		Date now = new Date();
 		Car car = new Car("test", now);
 		Client client = new Client("tester", now,car);
@@ -92,7 +92,7 @@ public class ExampleApplicationTests {
 
 
 	@Test(expected = IllegalArgumentException.class)
-	public void checkClientCarException() {
+	public void checkClientCarExceptionTest() {
 		Date now = new Date();
 		Car car = new Car("test", now);
 		Car car2 = new Car("test2", now);
@@ -105,7 +105,7 @@ public class ExampleApplicationTests {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void dontHaveAnyFreeCarsException(){
+	public void dontHaveAnyFreeCarsExceptionTest(){
 		Date now = new Date();
 		Car car = new Car("test", now);
 		Client client = new Client("tester", now,car);

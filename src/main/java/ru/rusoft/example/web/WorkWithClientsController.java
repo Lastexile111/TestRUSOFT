@@ -71,6 +71,7 @@ public class WorkWithClientsController {
 
         }
 
+
         try {
             birthYear = format.parse(addFormBean.getBirthYear());
         } catch (ParseException e) {
@@ -95,7 +96,7 @@ public class WorkWithClientsController {
         }
 
 
-        return "redirect:/main";
+        return "object created";
     }
 
 
@@ -113,26 +114,25 @@ public class WorkWithClientsController {
             throw new IllegalArgumentException("Поле Login пустое");
         }
 
-
         if (deleteFormBean.getLabel() == null) {
         throw new IllegalArgumentException("Поле Lebel пустое");
         }
 
 
 
-        Client client = clientsDAO.findByLogin(deleteFormBean.getLogin());
-
-        Car car = null;
         try {
-            car = carsDAO.getAndCheckClientCar(client, deleteFormBean.getLabel());
+            Client client = clientsDAO.findByLogin(deleteFormBean.getLogin());
+
+            carsDAO.detachClient(carsDAO.getAndCheckClientCar(client, deleteFormBean.getLabel()));
+            clientsDAO.delete(client);
         }catch(IllegalArgumentException e) {
             e.printStackTrace();
         }
 
-        carsDAO.detachClient(car);
-        clientsDAO.delete(client);
 
-        return "redirect:/main";
+
+
+        return "object deleted";
     }
 
 }

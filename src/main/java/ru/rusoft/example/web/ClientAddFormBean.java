@@ -15,6 +15,19 @@ public class ClientAddFormBean {
     @Size(min = 4, max = 4)
     private String manufactureDate = "";
 
+    public ClientAddFormBean() {
+    }
+
+    public ClientAddFormBean(@Size(min = 3, max = 50) String login,
+                             @Size(min = 4, max = 50) String birthYear,
+                             @Size(min = 2, max = 50) String label,
+                             @Size(min = 4, max = 50) String manufactureDate) {
+        this.login = login;
+        this.birthYear = birthYear;
+        this.label = label;
+        this.manufactureDate = manufactureDate;
+    }
+
     public String getLogin() {
         return login;
     }
