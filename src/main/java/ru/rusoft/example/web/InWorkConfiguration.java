@@ -34,7 +34,7 @@ import static springfox.documentation.builders.PathSelectors.regex;
 public class InWorkConfiguration extends WebMvcConfigurerAdapter{
     @Bean
     public EntityManagerFactory getEntityManagerFactory() {
-        return Persistence.createEntityManagerFactory("ProdPersistenceUnit");
+        return Persistence.createEntityManagerFactory("InWorkPersistenceUnit");
     }
 
     @Bean
